@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sqkj.znyj.dao.CFDao">
+	<resultMap id="CFMap" type="com.sqkj.znyj.model.CFXX">
+		<result column="CFXH" property="CFXH" />
+		<result column="HZMZ" property="HZMZ" />
+		<result column="RGWCZT" property="RGWCZT"/>
+		<result column="YXJ" property = "YXJ" />
+	</resultMap>
+	<select id="getQYCF" resultMap="CFMap" parameterType="java.util.Map">
+		select top 1 CFXH,HZMZ,YXJ from SQ_CFXX where 1=1 
+		<if test="RGWCZT == 1 || RGWCZT == 2">
+			and RGWCZT = #{RGWCZT}
+		</if>
+		<if test="CFXH != null  &amp; CFXH != ''">
+			and CFXH = #{CFXH}
+		</if>
+		<if test="YXJ == 0 || YXJ == 4">
+			and YXJ = #{YXJ}
+		</if>
+		and CFSJ &lt;&gt; '' and CFSJ is not Null order by YXJ desc,CFSJ asc
+	</select>	
+	<update id="updateQYCF" parameterType="java.util.Map">
+		update SQ_CFXX set RGWCZT = #{RGWCZT} where CFXH = #{CFXH}
+	</update>
+</mapper>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sqkj.znyj.dao.ZJQDao">
+	<resultMap id="ZJQMap" type="com.sqkj.znyj.model.ZJQ">
+		<id column="id" property="id" />
+		<result column="ZJQIP" property="ZJQIP" />
+		<result column="ZJQMC" property="ZJQMC" />
+	</resultMap>
+	<select id="getZJQById" resultMap="ZJQMap" parameterType="java.util.Map">
+		select * from SQ_ZJQ where id = #{id}
+	</select>
+	<select id="getZJQList" resultMap="ZJQMap" parameterType="java.util.Map">
+		select * from (
+		select top (#{length}) * from (
+		select top (#{start}+#{length}) * from SQ_ZJQ where 1=1
+		<if test="id !=0 &amp; id != null">
+			and id = #{id}
+		</if>
+		<if test="ZJQIP !=null &amp; ZJQIP!=''">
+			and ZJQIP = #{ZJQIP}
+		</if>
+		<if test="ZJQMC !=null &amp; ZJQMC!=''">
+			and ZJQMC = #{ZJQMC}
+		</if>
+		<if test="keywords != null">
+			and id like '%${keywords}%' or ZJQMC like '%${keywords}%' or ZJQIP like
+			'%${keywords}%'
+		</if>
+		order by id asc
+		) as a order by a.id desc
+		) as b order by b.id asc
+	</select>
+	<select id="getZJQCount" resultType="int" parameterType="java.util.Map">
+		select count(*) from SQ_ZJQ where 1=1
+		<if test="id !=0 &amp; id != null">
+			and id = #{id}
+		</if>
+		<if test="ZJQIP !=null &amp; ZJQIP!=''">
+			and ZJQIP = #{ZJQIP}
+		</if>
+		<if test="ZJQMC !=null &amp; ZJQMC!=''">
+			and ZJQMC = #{ZJQMC}
+		</if>
+		<if test="keywords != null">
+			and id like '%${keywords}%' or ZJQMC like '%${keywords}%' or ZJQIP like
+			'%${keywords}%'
+		</if>
+	</select>
+	<insert id="addZJQ" parameterType="java.util.Map">
+		insert into SQ_ZJQ(ZJQMC,ZJQIP) values(#{ZJQMC},#{ZJQIP})
+	</insert>
+	<update id="updateZJQ" parameterType="java.util.Map">
+		update SQ_ZJQ set ZJQMC = #{ZJQMC} , ZJQIP = #{ZJQIP} where id=#{id}
+	</update>
+	<delete id="deleteZJQ" parameterType="java.util.Map">
+		delete from SQ_ZJQ where 1=1 and id = #{id}
+	</delete>
+</mapper>

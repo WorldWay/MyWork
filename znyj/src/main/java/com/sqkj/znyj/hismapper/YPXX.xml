@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sqkj.znyj.hisdao.YPXXDao" >
+  <resultMap id="YPXXMap" type="com.sqkj.znyj.model.YPXX" >
+    <id column="YPBH" property="YPBH"/>
+    <result column="YPMC" property="YPMC"/>
+    <result column="XQ" property="XQ"/>
+    <result column="FL" property="FL"/>
+  </resultMap>
+  <select id="getYPXXList" resultMap="YPXXMap" parameterType="com.sqkj.znyj.model.YPXX" >
+    select a.YPBH as YPBH,a.XQ as XQ,(case a.FL when '1' then '针剂' when '2' then '盒装' end)as FL,a.YPMC as YPMC from SQ_YPXX as a
+  </select>
+  <select id="getYPXXbyID" resultMap="YPXXMap" parameterType="com.sqkj.znyj.model.YPXX" >
+    select a.YPBH as YPBH,a.XQ as XQ,(case a.FL when '1' then '针剂' when '2' then '盒装' end)as FL,a.YPMC as YPMC from SQ_YPXX as a where a.YPBH = #{YPBH}
+  </select>
+</mapper>

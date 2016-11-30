@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sqkj.znyj.dao.PMDao">
+	<resultMap id="PMMap" type="com.sqkj.znyj.model.PM">
+		<result column="PMID" property="PMID" />
+		<result column="ZJQIP" property="ZJQIP" />
+		<result column="PMDZ" property="PMDZ" />
+		<result column="YPBH" property="YPBH" />
+	</resultMap>
+	<select id="getPMById" resultMap="PMMap" parameterType="java.util.Map">
+		select * from SQ_PM where PMID = #{PMID}
+	</select>
+	<select id="getPMList" resultMap="PMMap" parameterType="java.util.Map">
+		select * from (
+		select top (#{length}) * from (
+		select top (#{start}+#{length}) * from SQ_PM 
+		 where 1=1
+		<if test="PMID !=null &amp; PMID != ''">
+			and PMID = #{PMID}
+		</if>
+		<if test="ZJQIP !=null &amp; ZJQIP!=''">
+			and ZJQIP = #{ZJQIP}
+		</if>
+		<if test="PMDZ !=null &amp; PMDZ!=''">
+			and PMDZ = #{PMDZ}
+		</if>
+		<if test="YPBH !=null &amp; YPBH!=''">
+			and YPBH = #{YPBH}
+		</if>
+		<if test="keywords != null">
+			and PMID like '%${keywords}%' or PMDZ like '%${keywords}%' or ZJQIP like
+			'%${keywords}%' or YPBH like '%${keywords}%'
+		</if>
+		order by ZJQIP asc,PMDZ asc
+		) as c order by c.ZJQIP desc,PMDZ desc
+		) as d order by d.ZJQIP asc,PMDZ asc
+	</select>
+	<select id="getPMCount" resultType="int" parameterType="java.util.Map">
+		select count(*) from SQ_PM 
+		 where 1=1
+		<if test="PMID !=null &amp; PMID != ''">
+			and PMID = #{PMID}
+		</if>
+		<if test="ZJQIP !=null &amp; ZJQIP!=''">
+			and ZJQIP = #{ZJQIP}
+		</if>
+		<if test="PMDZ !=null &amp; PMDZ!=''">
+			and PMDZ = #{PMDZ}
+		</if>
+		<if test="YPBH !=null &amp; YPBH!=''">
+			and YPBH = #{YPBH}
+		</if>
+		<if test="keywords != null">
+			and PMID like '%${keywords}%' or PMDZ like '%${keywords}%' or ZJQIP like
+			'%${keywords}%' or YPBH like '%${keywords}%'
+		</if>
+	</select>
+	<insert id="addPM" parameterType="java.util.Map">
+		insert into SQ_PM(PMID,ZJQIP,PMDZ,YPBH) values(#{PMID},#{ZJQIP},#{PMDZ},#{YPBH})
+	</insert>
+	<update id="updatePM" parameterType="java.util.Map">
+		update SQ_PM set PMDZ = #{PMDZ} , ZJQIP = #{ZJQIP}, YPBH = #{YPBH}, KW1 = #{KW1}, KW2= #{KW2} where PMID=#{PMID}
+	</update>
+	<delete id="deletePM" parameterType="java.util.Map">
+		delete from SQ_PM where 1=1 and PMID = #{PMID}
+	</delete>
+	<delete id="deletePMbyZJQ" parameterType="java.util.Map">
+		delete from SQ_PM where 1=1 and ZJQIP = #{ZJQIP}
+	</delete>
+</mapper>
