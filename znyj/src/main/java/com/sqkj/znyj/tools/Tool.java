@@ -3,8 +3,6 @@ package com.sqkj.znyj.tools;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Random;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -205,19 +203,6 @@ public class Tool {
 		return false;
 	}
 	
-	public static int delayTime = 2;
-	
-	public static ScheduledThreadPoolExecutor	tpool = new ScheduledThreadPoolExecutor(1);
-	
-	public static ScheduledThreadPoolExecutor	endtpool = new ScheduledThreadPoolExecutor(1);
-	
-	public static void main(String args[]) {
-		
-		Random r = new Random();
-		byte[] b = new byte[2];
-		for (int i = 0;i<100;i++){
-		r.nextBytes(b);		
-		}
-		System.out.println(bytes2HexString(byteGet(str2bytes("20161125000001", null), 1, 6)));
-	}
+	public static int delayTime = 6;
+
 }

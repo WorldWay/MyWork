@@ -4,7 +4,6 @@ import java.util.Iterator;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.mina.core.service.IoHandlerAdapter;
@@ -12,7 +11,10 @@ import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.core.session.IoSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
+import com.sqkj.znyj.dao.CFDao;
+import com.sqkj.znyj.dao.CFYPDao;
+import com.sqkj.znyj.model.CFXX;
+import com.sqkj.znyj.model.PM;
 import com.sqkj.znyj.service.CheckService;
 import com.sqkj.znyj.service.DeviceService;
 import com.sqkj.znyj.tools.Orders;
@@ -28,6 +30,12 @@ public class ServerHandler extends IoHandlerAdapter {
 	
 	@Autowired
 	private CheckService checkService;
+	
+	@Autowired
+	private CFDao cfdao;
+	
+	@Autowired
+	private CFYPDao cfypdao;
 
 	public ServerHandler() {
 		// TODO Auto-generated constructor stub
@@ -38,6 +46,7 @@ public class ServerHandler extends IoHandlerAdapter {
 			throws Exception {
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void messageReceived(IoSession session, Object message)
 			throws Exception {
@@ -56,6 +65,7 @@ public class ServerHandler extends IoHandlerAdapter {
 		//校验结束		
 		try {
 			JSONObject obj = new JSONObject();
+			JSONObject json = new JSONObject();
 			obj.put("addr", buffer[2]);
 			obj.put("ip", session.getRemoteAddress().toString().substring(1));
 			JSONArray arr = null;
@@ -107,8 +117,7 @@ public class ServerHandler extends IoHandlerAdapter {
 				if (arr!=null){
 					//获取该中继器下所有屏幕的地址
 					boolean[] pow = new boolean[100];
-					for (@SuppressWarnings("unchecked")
-					Iterator<JSONObject> i = arr.iterator();i.hasNext();){
+					for (Iterator<JSONObject> i = arr.iterator();i.hasNext();){
 						JSONObject j = i.next();
 						pow[j.getInt("PMDZ")] = true;
 					}
@@ -131,7 +140,21 @@ public class ServerHandler extends IoHandlerAdapter {
 					Orders.sendOrder(obj);
 				}
 				break;
+			case 0x62:
+				obj.put("ZJQIP", obj.getString("ip").trim());
+				obj.put("PMDZ", obj.getInt("addr"));
+				PM pm = deviceService.getPMByDZ(obj);
+				obj.put("YPBH", pm.getYPBH());
+												
+				json.put("RGWCZT", 2);
+				CFXX hascf = cfdao.getQYCF(Tool.Json2Map(json));
+				if (hascf != null){
+					obj.put("CFBH", hascf.getCFBH());
+					obj.put("FYCS", 1);		
+					cfypdao.updateCFYP(obj);
+				}
 				
+				break;
 			default:
 				break;
 			}

@@ -10,6 +10,9 @@
 	<select id="getPMById" resultMap="PMMap" parameterType="java.util.Map">
 		select * from SQ_PM where PMID = #{PMID}
 	</select>
+	<select id="getPMByDZ" resultMap="PMMap" parameterType="java.util.Map">
+		select * from SQ_PM where ZJQIP = #{ZJQIP} and PMDZ = #{PMDZ}
+	</select>
 	<select id="getPMList" resultMap="PMMap" parameterType="java.util.Map">
 		select * from (
 		select top (#{length}) * from (

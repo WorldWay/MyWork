@@ -79,23 +79,6 @@ public class SessionMap {
 		return arr;
 	}
 
-	/**
-	 * @Description: 发送消息到客户端
-	 * @author way
-	 * @throws InterruptedException 
-	 * 
-	 */
-	public void send(String ip, String message) throws InterruptedException {
-		IoSession session = getSession(ip);
-		byte[] b = Tool.str2bytes(message, " ");
-
-		if (session == null) {
-			return;
-		}		
-		Thread.sleep(100);
-		log.info(message);
-		session.write(IoBuffer.wrap(b));
-	}
 
 	/**
 	 * @Description: 发送消息到客户端
@@ -103,38 +86,21 @@ public class SessionMap {
 	 * @throws InterruptedException 
 	 * 
 	 */
-	public void send(String ip, byte[] message) throws InterruptedException {
-		IoSession session = getSession(ip);
+	public synchronized void send(String ip, byte[] message) throws InterruptedException {
+		try {
+			IoSession session = getSession(ip);
 
-		if (session == null) {
-			return;
-		}
-		Thread.sleep(100);
-		log.info(Tool.bytes2HexString(message));
-		session.write(IoBuffer.wrap(message));
-	}
-	
-	/**
-	 * @Description: 发送消息到客户端
-	 * @author way
-	 * @throws InterruptedException 
-	 * 
-	 */
-	public void sendMessage(String[] keys, Object message) throws InterruptedException {
-		for (String key : keys) {
-			IoSession session = getSession(key);
-
-			log.debug("反向发送消息到客户端Session---key=" + key + "----------消息="
-					+ message);
 			if (session == null) {
 				return;
 			}
 			Thread.sleep(100);
-			
-			session.write(message);
-
+			log.info(Tool.bytes2HexString(message));
+			session.write(IoBuffer.wrap(message));
+		} catch (Exception e) {
+			log.error(message + "======================" + e);
 		}
 	}
+	
 	
 	/**
 	 * @Description: 指定设备是否在线

@@ -43,7 +43,6 @@
 						<li id="QY" type="btn" class="active"><a href="#"><i class="fa fa-circle-o"></i> 取药</a></li>
 						<li id="check" type="btn" ><a href="#"><i class="fa fa-circle-o"></i> 盘点</a></li>
 						<li id="device" type="btn" ><a href="#"><i class="fa fa-circle-o"></i> 设备管理</a></li>
-						<li id="test" type="btn" ><a href="#"><i class="fa fa-circle-o"></i> 测试</a></li>
 					</ul>
 				</li>
 			</ul>

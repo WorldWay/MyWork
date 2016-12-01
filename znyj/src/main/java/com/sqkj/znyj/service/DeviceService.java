@@ -211,17 +211,25 @@ public class DeviceService implements IDeviceService {
 					YPXX ypxx = ypxxdao.getYPXXbyID(ypjson);
 					if (ypxx != null){									
 						int count = checkdao.getPDbyId(Tool.Json2Map(ypjson)).getYPSL();
+						PM pm = pmdao.getPMByDZ(json);
 						//发送药品名称、效期、剂型、库位和数量
 						JSONObject obj = new JSONObject();
 						
 						obj.put("addr", json.getString("PMDZ").trim());
 						obj.put("ip",json.getString("ZJQIP").trim());
+						obj.put("medTime", Tool.delayTime);
+						obj.put("idNum", pm.getPMID().trim());
+						obj.put("orderType", "7B");
+						Orders.sendOrder(obj);
+						
 						obj.put("medcf", "");
 						obj.put("medtotal", count);
 						obj.put("orderType", "52");
 						Orders.sendOrder(obj);
+						
 						obj.put("orderType", "54");
 						Orders.sendOrder(obj);
+						
 						obj.put("orderType", "53");
 						obj.put("medpos1", json.getInt("KW1"));
 						obj.put("medpos2", json.getInt("KW2"));
@@ -231,6 +239,7 @@ public class DeviceService implements IDeviceService {
 						obj.put("medy", date.getYear()%100);
 						obj.put("medm", date.getMonth());
 						Orders.sendOrder(obj);
+						
 						obj.put("orderType", "56");
 						Orders.sendOrder(obj);
 					}
@@ -258,5 +267,20 @@ public class DeviceService implements IDeviceService {
 		}				
 		return false;
 	}	
+	
+	@Override
+	public PM getPMByDZ(JSONObject json){
+		try {
+			Map<String, Object> map = Tool.Json2Map(json);
+			PM result = pmdao.getPMByDZ(map);
+			if (result != null)
+				return result;
+		} catch (Exception e) {
+			log.error(e);
+		} finally {
+		}
+		
+		return null;
+	}
 	//屏幕End
 }

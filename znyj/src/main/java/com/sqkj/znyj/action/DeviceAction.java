@@ -16,6 +16,7 @@ import com.sqkj.znyj.mina.SessionMap;
 import com.sqkj.znyj.model.PM;
 import com.sqkj.znyj.service.DeviceService;
 import com.sqkj.znyj.tools.Orders;
+import com.sqkj.znyj.tools.Tool;
 
 @Controller
 @RequestMapping("/pages")
@@ -177,7 +178,7 @@ public class DeviceAction {
 		return obj;
 	}
 	
-	/**
+	/** 
 	 * 删除屏幕数据
 	 * @param jsonStr
 	 * @return

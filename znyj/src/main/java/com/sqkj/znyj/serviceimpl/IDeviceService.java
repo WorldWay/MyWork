@@ -25,5 +25,6 @@ public interface IDeviceService {
 	public boolean addPM(JSONObject json);
 	public boolean updatePM(JSONObject json);
 	public boolean deletePM(JSONObject json);
+	public PM getPMByDZ(JSONObject json);
 	//屏幕 End
 }

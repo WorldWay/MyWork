@@ -2,16 +2,28 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.sqkj.znyj.dao.CFYPDao">
 	<resultMap id="CFYPMap" type="com.sqkj.znyj.model.CFYP">
+		<result column="id"	property="id"/>
 		<result column="ZJQIP" property="ZJQIP" />
 		<result column="PMDZ" property="PMDZ" />
 		<result column="YPSL" property="YPSL" />
 		<result column="YPBH" property="YPBH" />
+		<result column="FYCS" property="FYCS"/> 
 	</resultMap>
 	<select id="getCFYPList" resultMap="CFYPMap" parameterType="java.util.Map">
-		select a.ZJQIP as ZJQIP,a.PMDZ as PMDZ,a.YPBH as YPBH,b.YPSL as YPSL
+		select a.ZJQIP as ZJQIP,a.PMDZ as PMDZ,a.YPBH as YPBH,b.YPSL,b.FYCS as FYCS
 		from SQ_PM as a
 		left join SQ_CFYP as b on a.YPBH = b.YPBH
 		left join SQ_CFXX as c on b.CFBH = c.CFBH
 		where c.CFXH = #{CFXH}
+	</select>
+	<update id="updateCFYP" parameterType="java.util.Map">
+		update SQ_CFYP set FYCS = #{FYCS} where CFBH = #{CFBH} and YPBH = #{YPBH}
+	</update>
+	<select id="getCFYPByYPBH" resultMap="CFYPMap" parameterType="java.util.Map">
+		select a.ZJQIP as ZJQIP,a.PMDZ as PMDZ,a.YPBH as YPBH,b.YPSL,b.FYCS as FYCS
+		from SQ_PM as a
+		left join SQ_CFYP as b on a.YPBH = b.YPBH
+		left join SQ_CFXX as c on b.CFBH = c.CFBH
+		where c.CFBH = #{CFBH} and a.YPBH = #{YPBH}
 	</select>
 </mapper>

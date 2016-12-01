@@ -21,7 +21,9 @@ public interface PMDao {
 	public int updatePM(Map<String, Object> map);
 
 	public int deletePM(Map<String, Object> map);
-	
+
 	public int deletePMbyZJQ(Map<String, Object> map);
+
+	public PM getPMByDZ(Map<String, Object> map);
 
 }

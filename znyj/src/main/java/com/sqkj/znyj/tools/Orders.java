@@ -199,6 +199,29 @@ public class Orders {
 	}
 	
 	/**
+	 * 向所有下位机传送电子标签ID和对应的下位机地址
+	 * @param obj
+	 * @param type
+	 * @throws Exception
+	 */
+	private static void order7B(JSONObject obj,int type) throws Exception{
+		//Random r = new Random(255);
+		byte[] msg = new byte[2];
+		r.nextBytes(msg);
+		msg = Tool.byteUnion(msg, Tool.int2byte(obj.getInt("addr"), 1));
+		msg = Tool.byteUnion(msg, new byte[] { (byte) 0x0A, (byte) 0x7B });
+		if (type == 0){
+			msg = Tool.byteUnion(msg, Tool.str2bytes(obj.getString("idNum"), null));
+			msg = Tool.byteUnion(msg, Tool.int2byte(obj.getInt("addr"), 1));
+			msg = Tool.byteUnion(msg, Tool.toBCD(obj.getInt("medTime"),1));
+		} else if (type == 1) {
+			
+		}
+		msg = addjym(msg);		
+		SessionMap.newInstance().send(obj.getString("ip"), msg);
+	}
+	
+	/**
 	 * 添加校验码
 	 * @param msg
 	 */
@@ -257,11 +280,14 @@ public class Orders {
 			case 0x5B:
 				order5B(obj,type);
 				break;
+			case 0x7B:
+				order7B(obj,type);
+				break;
 			default:
 				break;
 			}
 		} catch(Exception e){
-			log.error(e);
+			log.error(obj+"======================="+e);
 			return false;
 		}
 		return true;

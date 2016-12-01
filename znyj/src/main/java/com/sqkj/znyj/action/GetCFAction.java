@@ -25,19 +25,15 @@ public class GetCFAction {
 	@RequestMapping(value="/QYstart.json",method = RequestMethod.POST)
 	public JSONObject QYstart(){
 		JSONObject obj = new JSONObject();
-		
-		obj.put("data", cfservice.QYstart(new JSONObject()));
-		
+				
 		return obj;
 	}
 	
 	@ResponseBody
 	@RequestMapping(value="/QYend.json",method = RequestMethod.POST)
 	public JSONObject QYend(){
-		JSONObject obj = new JSONObject();
-		
-		obj.put("data", cfservice.QYend(new JSONObject()));
-		
+		JSONObject obj = new JSONObject();		
+		cfservice.QYend(obj);
 		return obj;
 	}
 }

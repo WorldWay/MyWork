@@ -2,13 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.sqkj.znyj.dao.CFDao">
 	<resultMap id="CFMap" type="com.sqkj.znyj.model.CFXX">
+		<result column="CFBH" property="CFBH"/>
 		<result column="CFXH" property="CFXH" />
 		<result column="HZMZ" property="HZMZ" />
 		<result column="RGWCZT" property="RGWCZT"/>
 		<result column="YXJ" property = "YXJ" />
 	</resultMap>
 	<select id="getQYCF" resultMap="CFMap" parameterType="java.util.Map">
-		select top 1 CFXH,HZMZ,YXJ from SQ_CFXX where 1=1 
+		select top 1 CFBH,CFXH,HZMZ,YXJ from SQ_CFXX where 1=1 
 		<if test="RGWCZT == 1 || RGWCZT == 2">
 			and RGWCZT = #{RGWCZT}
 		</if>

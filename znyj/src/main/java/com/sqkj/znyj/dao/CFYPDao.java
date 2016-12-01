@@ -12,4 +12,8 @@ public interface CFYPDao {
 
 	public List<CFYP> getCFYPList(Map<String, Object> map);
 	
+	public int updateCFYP(Map<String, Object> map);
+	
+	public CFYP getCFYPByYPBH(Map<String, Object> map);
+	
 }

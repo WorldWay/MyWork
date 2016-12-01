@@ -1,10 +1,20 @@
 package com.sqkj.znyj.model;
 
 public class CFYP {
+	private long id;
 	private String ZJQIP;
 	private int PMDZ;
 	private String YPBH;
 	private int YPSL;
+	private int FYCS;
+	
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
 
 	public String getZJQIP() {
 		return ZJQIP;
@@ -38,4 +48,12 @@ public class CFYP {
 		YPSL = yPSL;
 	}
 
+	public int getFYCS() {
+		return FYCS;
+	}
+
+	public void setFYCS(int fYCS) {
+		FYCS = fYCS;
+	}
+	
 }
