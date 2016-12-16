@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sqkj.znyj.dao.CheckDao">
+	<resultMap id="PDMap" type="com.sqkj.znyj.model.PD">
+		<result column="YPBH" property="YPBH" />
+		<result column="YPMC" property="YPMC" />
+		<result column="XQ" property="XQ" />
+		<result column="YPSL" property="YPSL" />
+		<result column="isRight" property="isRight"/>
+	</resultMap>
+	<select id="getPDbyId" resultMap="PDMap" parameterType="java.util.Map">
+		select * from
+			(select a.YPBH as YPBH,a.isRight as isRight from sq_pm as a
+				where a.YPBH &lt;&gt; '' 
+			) as tab
+		where tab.YPBH = #{YPBH}
+	</select>
+	<select id="getPDList" resultMap="PDMap" parameterType="java.util.Map">
+		select * from (
+		select top (#{length}) *
+		 from (
+		select top (#{start}+#{length}) * from 
+		
+		(select a.YPBH as YPBH,a.isRight as isRight from sq_pm as a
+			where a.YPBH &lt;&gt; '' 
+		) as tab
+		
+		where 1=1
+		<if test="YPBH !=null &amp; YPBH!=''">
+			and tab.YPBH = #{YPBH}
+		</if>
+		<if test="keywords != null">
+			and tab.YPBH like '%${keywords}%' or tab.isRight like '%${keywords}%'
+		</if>
+		order by tab.YPBH asc
+		) as d order by d.YPBH desc
+		) as e order by e.YPBH asc
+	</select>
+	<select id="getPDCount" resultType="int" parameterType="java.util.Map">
+		select count(*) from 
+		
+		(select a.YPBH as YPBH,a.isRight as isRight from sq_pm as a
+			where a.YPBH &lt;&gt; '' 
+		) as tab
+		 
+		 where 1=1
+		<if test="YPBH !=null &amp; YPBH!=''">
+			and tab.YPBH = #{YPBH}
+		</if>
+		<if test="keywords != null">
+			and  tab.YPBH like '%${keywords}%' or tab.isRight like '%${keywords}%'
+		</if>
+	</select>
+	<update id="updatePD" parameterType="java.util.Map">
+		update SQ_PM set isRight = #{isRight} where PMDZ = #{PMDZ} and ZJQIP = #{ZJQIP}
+	</update>
+	<update id="resetPD" >
+		update SQ_PM set isRight = '未确认'
+	</update>
+</mapper>
