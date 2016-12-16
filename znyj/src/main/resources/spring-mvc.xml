@@ -120,8 +120,8 @@
 				<entry key="executor" value-ref="executorFilter" />	
 				<entry key="codecFilter" value-ref="codecFilter" />
 				<entry key="loggingFilter" value-ref="loggingFilter" />
+				<entry key="mdcInjectionFilter" value-ref="mdcInjectionFilter" />						
 				<entry key="keepAliveFilter" value-ref="keepAliveFilter" />
-				<entry key="mdcInjectionFilter" value-ref="mdcInjectionFilter" />		
 			</map>
 		</property>
 	</bean>

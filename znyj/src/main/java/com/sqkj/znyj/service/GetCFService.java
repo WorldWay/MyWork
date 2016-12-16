@@ -2,6 +2,7 @@ package com.sqkj.znyj.service;
 
 import java.util.Iterator;
 import java.util.List;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,7 @@ import net.sf.json.JSONObject;
 
 import com.sqkj.znyj.dao.CFDao;
 import com.sqkj.znyj.dao.CFYPDao;
-import com.sqkj.znyj.hisdao.CheckDao;
+import com.sqkj.znyj.dao.CheckDao;
 import com.sqkj.znyj.model.CFXX;
 import com.sqkj.znyj.model.CFYP;
 import com.sqkj.znyj.serviceimpl.IGetCFService;
@@ -28,9 +29,6 @@ public class GetCFService implements IGetCFService {
 
 	@Autowired
 	private CFYPDao cfypdao;
-	
-	@Autowired
-	private CheckDao checkdao;
 	
 	@Override
 	public void QYend(JSONObject json) {
@@ -49,6 +47,7 @@ public class GetCFService implements IGetCFService {
 						obj.put("addr", cfyp.getPMDZ());
 						obj.put("orderType", "54");
 						Orders.sendOrder(obj);
+						log.warn("处方结束中========================="+JSONObject.fromObject(cf));
 					}
 				}
 				//更新处方状态

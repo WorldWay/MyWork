@@ -94,7 +94,7 @@ public class SessionMap {
 				return;
 			}
 			Thread.sleep(100);
-			log.info(Tool.bytes2HexString(message));
+			log.info("发送信息:"+Tool.bytes2HexString(message));
 			session.write(IoBuffer.wrap(message));
 		} catch (Exception e) {
 			log.error(message + "======================" + e);

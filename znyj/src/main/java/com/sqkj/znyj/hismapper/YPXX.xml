@@ -6,11 +6,19 @@
     <result column="YPMC" property="YPMC"/>
     <result column="XQ" property="XQ"/>
     <result column="FL" property="FL"/>
+    <result column="YPSL" property="YPSL"/>
   </resultMap>
   <select id="getYPXXList" resultMap="YPXXMap" parameterType="com.sqkj.znyj.model.YPXX" >
-    select a.YPBH as YPBH,a.XQ as XQ,(case a.FL when '1' then '针剂' when '2' then '盒装' end)as FL,a.YPMC as YPMC from SQ_YPXX as a
+    select a.YPBH as YPBH,a.XQ as XQ,(case a.FL when '1' then '针剂' when '2' then '盒装' end)as FL,a.YPMC as YPMC,sum(c.YWYPSL) as YPSL
+    from SQ_YPXX as a
+    left join sq_ypyw as c on a.YPBH=c.YPBH
+    group by a.YPBH,a.YPMC,a.XQ,a.FL
   </select>
   <select id="getYPXXbyID" resultMap="YPXXMap" parameterType="com.sqkj.znyj.model.YPXX" >
-    select a.YPBH as YPBH,a.XQ as XQ,(case a.FL when '1' then '针剂' when '2' then '盒装' end)as FL,a.YPMC as YPMC from SQ_YPXX as a where a.YPBH = #{YPBH}
+    select a.YPBH as YPBH,a.XQ as XQ,(case a.FL when '1' then '针剂' when '2' then '盒装' end)as FL,a.YPMC as YPMC,sum(c.YWYPSL) as YPSL 
+    from SQ_YPXX as a 
+    left join sq_ypyw as c on a.YPBH=c.YPBH
+    where a.YPBH = #{YPBH}
+    group by a.YPBH,a.YPMC,a.XQ,a.FL
   </select>
 </mapper>

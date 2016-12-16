@@ -14,10 +14,10 @@ import org.springframework.stereotype.Component;
 
 import com.sqkj.znyj.dao.CFDao;
 import com.sqkj.znyj.dao.CFYPDao;
-import com.sqkj.znyj.hisdao.CheckDao;
+import com.sqkj.znyj.hisdao.YPXXDao;
 import com.sqkj.znyj.model.CFXX;
 import com.sqkj.znyj.model.CFYP;
-import com.sqkj.znyj.model.PD;
+import com.sqkj.znyj.model.YPXX;
 import com.sqkj.znyj.tools.Orders;
 import com.sqkj.znyj.tools.Tool;
 
@@ -33,14 +33,14 @@ public class Init implements InitializingBean {
 	private CFYPDao cfypdao;
 	
 	@Autowired
-	private CheckDao checkdao;
+	private YPXXDao ypxxdao;
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
 	}
 	
 	@SuppressWarnings("unchecked")
-	@Scheduled(fixedRate=1000)
+	@Scheduled(fixedRate=100)
 	public void QYstart() {
 		try {
 			JSONObject json = new JSONObject();
@@ -61,11 +61,12 @@ public class Init implements InitializingBean {
 						obj.put("ip", cfyp.getZJQIP());
 						obj.put("addr", cfyp.getPMDZ());
 						json.put("YPBH", cfyp.getYPBH().trim());
-						PD yp = checkdao.getPDbyId(Tool.Json2Map(json));
+						YPXX yp = ypxxdao.getYPXXbyID(Tool.Json2Map(json));
 						if (yp != null) {
 							obj.put("medtotal", yp.getYPSL());
 							obj.put("orderType", "52");
 							Orders.sendOrder(obj);
+							log.warn("处方发送中-------------------------------------------"+JSONObject.fromObject(hascf));
 						}
 					}
 				}
@@ -85,11 +86,12 @@ public class Init implements InitializingBean {
 						obj.put("ip", cfyp.getZJQIP());
 						obj.put("addr", cfyp.getPMDZ());
 						json.put("YPBH", cfyp.getYPBH().trim());
-						PD yp = checkdao.getPDbyId(Tool.Json2Map(json));
+						YPXX yp = ypxxdao.getYPXXbyID(Tool.Json2Map(json));
 						if (yp!=null){
 							obj.put("medtotal", yp.getYPSL());
 							obj.put("orderType", "52");
 							Orders.sendOrder(obj);
+							log.warn("处方发送中-------------------------------------------"+JSONObject.fromObject(cf));
 						}
 					}
 					//更新处方状态
@@ -102,6 +104,7 @@ public class Init implements InitializingBean {
 				} else {
 					cf.setRGWCZT(3);
 					json = JSONObject.fromObject(cf);
+					log.warn("处方结束："+json);
 					cfdao.updateQYCF(json);
 				}
 			}			

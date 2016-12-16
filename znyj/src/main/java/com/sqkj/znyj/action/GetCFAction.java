@@ -32,7 +32,8 @@ public class GetCFAction {
 	@ResponseBody
 	@RequestMapping(value="/QYend.json",method = RequestMethod.POST)
 	public JSONObject QYend(){
-		JSONObject obj = new JSONObject();		
+		JSONObject obj = new JSONObject();
+		log.warn("取药结束");
 		cfservice.QYend(obj);
 		return obj;
 	}

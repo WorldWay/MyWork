@@ -8,7 +8,7 @@ public class PD {
 	private String YPMC;
 	private String XQ;
 	private int YPSL;
-	private int isRight;
+	private String isRight;
 	
 	public PD(){}
 	
@@ -17,7 +17,7 @@ public class PD {
 		this.YPMC = json.getString("YPMC").trim();
 		this.XQ = json.getString("XQ").trim();
 		this.YPSL = json.getInt("YPSL");
-		this.isRight = json.getInt("isRight");
+		this.isRight = json.getString("isRight");
 	}
 
 	public String getYPBH() {
@@ -52,11 +52,11 @@ public class PD {
 		YPSL = yPSL;
 	}
 
-	public int getIsRight() {
+	public String getIsRight() {
 		return isRight;
 	}
 
-	public void setIsRight(int isRight) {
+	public void setIsRight(String isRight) {
 		this.isRight = isRight;
 	}	
 	

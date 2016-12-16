@@ -12,9 +12,9 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.sqkj.znyj.dao.CheckDao;
 import com.sqkj.znyj.dao.PMDao;
 import com.sqkj.znyj.dao.ZJQDao;
-import com.sqkj.znyj.hisdao.CheckDao;
 import com.sqkj.znyj.hisdao.YPXXDao;
 import com.sqkj.znyj.model.PM;
 import com.sqkj.znyj.model.YPXX;
@@ -210,7 +210,7 @@ public class DeviceService implements IDeviceService {
 					ypjson.put("YPBH", YPBH);
 					YPXX ypxx = ypxxdao.getYPXXbyID(ypjson);
 					if (ypxx != null){									
-						int count = checkdao.getPDbyId(Tool.Json2Map(ypjson)).getYPSL();
+						int count = ypxxdao.getYPXXbyID(Tool.Json2Map(ypjson)).getYPSL();
 						PM pm = pmdao.getPMByDZ(json);
 						//发送药品名称、效期、剂型、库位和数量
 						JSONObject obj = new JSONObject();

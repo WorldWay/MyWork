@@ -5,6 +5,8 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.keepalive.KeepAliveMessageFactory;
 
+import com.sqkj.znyj.tools.Tool;
+
 public class MyKeepAliveMessageFactory implements KeepAliveMessageFactory{
 
 	private final Log LOG = LogFactory.getLog(MyKeepAliveMessageFactory.class);
@@ -28,13 +30,14 @@ public class MyKeepAliveMessageFactory implements KeepAliveMessageFactory{
          } catch(Exception e){
         	 return false;
          }
-         if (data.length == 0) return false;
+         if (data.length != 1) return false;
          if (data[0]==HEARTBEATREQUEST[0])  
              return true; 
          return false;  
     }
     public boolean isResponse(IoSession session, Object message) {
-      LOG.debug("响应心跳包信息: " + message);  
+      LOG.debug("响应心跳包信息: " + message);
+      
       if (message == null) return false;
       byte[] data = null;
       try{
@@ -42,9 +45,9 @@ public class MyKeepAliveMessageFactory implements KeepAliveMessageFactory{
       } catch(Exception e){
      	 return false;
       }
-      if (data.length == 0) return false;
-      if(data[0]==HEARTBEATRESPONSE[0])  
-          return true;
+      if (data.length != 1) return false;
+      if(data[0]==HEARTBEATRESPONSE[0])
+    	  return true;
         return false;
     }	
 }

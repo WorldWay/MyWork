@@ -4,6 +4,7 @@ import java.util.Iterator;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.mina.core.service.IoHandlerAdapter;
@@ -11,12 +12,14 @@ import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.core.session.IoSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
 import com.sqkj.znyj.dao.CFDao;
 import com.sqkj.znyj.dao.CFYPDao;
 import com.sqkj.znyj.model.CFXX;
 import com.sqkj.znyj.model.PM;
 import com.sqkj.znyj.service.CheckService;
 import com.sqkj.znyj.service.DeviceService;
+import com.sqkj.znyj.thread.AddZJQTask;
 import com.sqkj.znyj.tools.Orders;
 import com.sqkj.znyj.tools.Tool;
 
@@ -77,7 +80,7 @@ public class ServerHandler extends IoHandlerAdapter {
 					obj.put("type", 0x51);
 					obj.put("ZJQIP", obj.getString("ip").toString());
 					obj.put("PMDZ", obj.getInt("addr"));
-					obj.put("isRight", 1);
+					obj.put("isRight", "正确");
 					checkService.updatePD(obj);
 					Orders.sendOrder(obj, 1);
 					break;
@@ -85,7 +88,7 @@ public class ServerHandler extends IoHandlerAdapter {
 					obj.put("type", 0x56);
 					obj.put("ZJQIP", obj.getString("ip").toString());
 					obj.put("PMDZ", obj.getInt("addr"));
-					obj.put("isRight", 2);
+					obj.put("isRight", "错误");
 					checkService.updatePD(obj);
 					Orders.sendOrder(obj, 1);
 					break;
@@ -194,11 +197,11 @@ public class ServerHandler extends IoHandlerAdapter {
 	@Override
 	public void sessionIdle(IoSession session, IdleStatus status)
 			throws Exception {
-		log.debug(session.getServiceAddress() + "IDS");
+		log.debug(session.getServiceAddress() + "IDS:"+status.toString());
 	}
 
 	@Override
-	public void sessionOpened(IoSession session) throws Exception {
+	public void sessionOpened(IoSession session) throws Exception{
 		// 保存客户端的会话session
 		SessionMap sessionMap = SessionMap.newInstance();
 		sessionMap.addSession(session.getRemoteAddress().toString()
@@ -207,9 +210,8 @@ public class ServerHandler extends IoHandlerAdapter {
 		JSONObject json = new JSONObject();
 		json.put("ZJQIP", session.getRemoteAddress().toString().substring(1));
 		json.put("ZJQMC", "");
-		int count = deviceService.getZJQCount(json);
-		if (count == 0)	deviceService.addZJQ(json);
-		else log.warn("中继器已添加");
+		AddZJQTask task = new AddZJQTask(deviceService, json);
+		task.start();
 	}
 
 }

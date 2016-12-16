@@ -6,6 +6,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.sqkj.znyj.dao.CFDao;
+import com.sqkj.znyj.model.CFXX;
 import com.sqkj.znyj.tools.Tool;
 
 
@@ -29,8 +30,11 @@ public class MyEndTask extends Thread{
 		} catch (InterruptedException e) {
 			log.error(e);
 		}
-		json.put("RGWCZT", 3);
-		log.info(json);
-		cfDao.updateQYCF(Tool.Json2Map(json));
+		CFXX cf = cfDao.getQYCF(Tool.Json2Map(json));
+		if (cf != null)
+		if (cf.getRGWCZT() != 1){
+			json.put("RGWCZT", 3);
+			cfDao.updateQYCF(Tool.Json2Map(json));
+		}
 	}
 }

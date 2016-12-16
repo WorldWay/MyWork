@@ -45,7 +45,7 @@ public class CheckAction {
 		      @RequestParam(required = false) Integer length){
 		JSONArray arr = new JSONArray();
 		//获取数据源总数
-		JSONObject json = new JSONObject();					
+		JSONObject json = new JSONObject();
 		json.put("keywords", keywords);
 		int total = checkService.getPDCount(json);
 		//获取数据源
@@ -60,10 +60,10 @@ public class CheckAction {
 			JSONObject j = i.next();
 			PD pd = new PD(j);
 			switch (pd.getIsRight()) {
-			case 1:
+			case "正确":
 				j.put("isRight", "<div class='bg-green' style='width:100%;height:25px' align='center'>正确</div>");		
 				break;
-			case 2:
+			case "错误":
 				j.put("isRight", "<div class='bg-red' style='width:100%;height:25px' align='center'>错误</div>");		
 				break;
 			default:

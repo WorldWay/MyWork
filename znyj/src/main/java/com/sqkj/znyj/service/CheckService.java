@@ -9,9 +9,12 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.sqkj.znyj.hisdao.CheckDao;
+import com.sqkj.znyj.dao.CheckDao;
+import com.sqkj.znyj.hisdao.YPXXDao;
 import com.sqkj.znyj.model.PD;
+import com.sqkj.znyj.model.YPXX;
 import com.sqkj.znyj.serviceimpl.ICheckService;
 import com.sqkj.znyj.tools.Tool;
 
@@ -22,14 +25,26 @@ public class CheckService implements ICheckService {
 	
 	@Autowired
 	private CheckDao checkdao;
+	
+	@Autowired
+	private YPXXDao ypxxdao;
 
+	@Transactional
 	@Override
 	public List<PD> getPDList(JSONObject json) {
 		try {
 			Map<String, Object> map = Tool.Json2Map(json);
 			List<PD> list = checkdao.getPDList(map);
-			if (list != null & list.size() != 0)
+			if (list != null & list.size() != 0){
+				for (int i=0;i<list.size();i++){
+					map.put("YPBH", list.get(i).getYPBH());
+					YPXX ypxx = ypxxdao.getYPXXbyID(map);
+					list.get(i).setXQ(ypxx.getXQ());
+					list.get(i).setYPMC(ypxx.getYPMC());
+					list.get(i).setYPSL(ypxx.getYPSL());
+				}
 				return list;
+			}
 		} catch (Exception e) {
 			log.error(e);
 		} finally {
